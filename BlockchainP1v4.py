@@ -60,7 +60,7 @@ for al in address_list:
 								address_list.append(o)
 								# print address_list
 
-print "# of addresses linked with ",btc_add, "is ", len(address_list)
+print "# of addresses linked with ",address_list[0], "is ", len(address_list)
 
 balance=[]
 #Error urls can be used to make more requests if HTTP errors are raised
