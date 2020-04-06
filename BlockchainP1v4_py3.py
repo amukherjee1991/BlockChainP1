@@ -53,7 +53,12 @@ def find_shared_spending(address):
     for transaction in transactions:
         # Get set of all input addresses for this transaction
         try:
-            input_addresses = [input_item['prev_out']['addr'] for input_item in transaction['inputs']]
+            # input_addresses = [input_item['prev_out']['addr'] for input_item in transaction['inputs']]
+            input_addresses = []
+            for input_item in transaction['inputs']:
+                if 'addr' in input_item['prev_out'].keys():
+                    input_addresses.append(input_item['prev_out']['addr'])
+
             input_addresses = set(input_addresses)
 
             if base_address in input_addresses: # and len(input_addresses) > 1:
@@ -67,17 +72,30 @@ def find_shared_spending(address):
     return linked_addresses
 
 
-def get_final_balances(address_set):
+def get_final_balances(address_set, force_local=cached_results):
     ''' Returns JSON of final balance queries '''
     baseurl = 'https://blockchain.info/balance?active='
 
     query = "|".join(address_set)
 
-    if debug:
-        print("Querying balances..")
-    time.sleep(sleep_time)
-    r = requests.get(baseurl+query, headers=headers)
-    json_response = json.loads(r.text)
+    # This will sum the final balances from local cached results
+    if force_local or len(address_set) > 20:
+        json_response = {}
+        if debug:
+            print("Summing balances from local cache..")
+        for address in address_set:
+            local_filename = "test_data/" + address + ".json"
+            if path.exists(local_filename):
+                with open(local_filename) as file:
+                    address_response = json.load(file)
+                json_response[address] = {'final_balance': address_response['final_balance']}
+    # Queries blockchain.info, but didn't work for 600+ addresses
+    else:
+        if debug:
+            print("Querying balances..")
+        time.sleep(sleep_time)
+        r = requests.get(baseurl+query, headers=headers)
+        json_response = json.loads(r.text)
 
     return json_response
 
@@ -97,7 +115,7 @@ def ensure_dir(file_path):
         makedirs(directory)
 
 
-def main(address, recursive=True):
+def main(address, recursive=False):
     checked_addresses = set()
     to_check = set()
 
@@ -134,10 +152,10 @@ def main(address, recursive=True):
 if __name__=="__main__":
 
     address_list=[
-        # '15hzoz4YzGnj9Pqu8eNmhw4tBpDGjNgwj9',
-        '36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5',
-        '19ere2oJzJh81A5Q64SExDZYz54RvWHqZz',
-        '19QDGMRKdZ9BpDZP2Re6yaDqNQ7zN4wo1D'
+        '15hzoz4YzGnj9Pqu8eNmhw4tBpDGjNgwj9',
+        # '36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5',
+        # '19ere2oJzJh81A5Q64SExDZYz54RvWHqZz',
+        # '19QDGMRKdZ9BpDZP2Re6yaDqNQ7zN4wo1D'
         ]
 
     for address in address_list:
