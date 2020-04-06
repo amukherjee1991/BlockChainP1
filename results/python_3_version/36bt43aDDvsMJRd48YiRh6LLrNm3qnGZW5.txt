@@ -1,0 +1,7 @@
+Results for address:			 36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5
+Total linked addresses:			 2
+Depth:					         2
+Summing balances from local cache..
+3Lr3uJY4cHM8zg8WhoLp9pfrsBXAQEj5ao	 0
+36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5	 0
+Balance for all linked address:		 0.0 BTC ( 0 Satoshis)
