@@ -2,7 +2,7 @@
 import time  # use time.sleep(number of seconds) to wait between requests
 import requests
 import json
-from os import path
+from os import path, makedirs
 
 
 ''' Global Settings '''
@@ -88,13 +88,13 @@ def print_balances(balance_json, print_all=debug):
         if print_all:
             print(str(key) + "\t " + str(value['final_balance']))
         total.append(int(value['final_balance']))
-    print("Balance for all linked address:\t\t", sum(total))
+    print("Balance for all linked address:\t\t", sum(total) / 100000000, " BTC (", sum(total), "Satoshis)")
 
 
 def ensure_dir(file_path):
-    directory = os.path.dirname(file_path)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    directory = path.dirname(file_path)
+    if not path.exists(directory):
+        makedirs(directory)
 
 
 def main(address, recursive=True):
@@ -135,9 +135,9 @@ if __name__=="__main__":
 
     address_list=[
         # '15hzoz4YzGnj9Pqu8eNmhw4tBpDGjNgwj9',
-        # '36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5',
+        '36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5',
         '19ere2oJzJh81A5Q64SExDZYz54RvWHqZz',
-        # '19QDGMRKdZ9BpDZP2Re6yaDqNQ7zN4wo1D'
+        '19QDGMRKdZ9BpDZP2Re6yaDqNQ7zN4wo1D'
         ]
 
     for address in address_list:
