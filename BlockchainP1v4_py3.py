@@ -13,7 +13,7 @@ debug = True
 cached_results = True
 
 
-def get_raw_address(address, cached = cached_results):
+def get_raw_address(address, cached=cached_results):
     ''' Return JSON response of raw address. Optionally uses cache.'''
 
     local_filename = "test_data/" + address + ".json"
@@ -91,9 +91,17 @@ def print_balances(balance_json, print_all=debug):
     print("Balance for all linked address:\t\t", sum(total))
 
 
+def ensure_dir(file_path):
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+
 def main(address, recursive=True):
     checked_addresses = set()
     to_check = set()
+
+    ensure_dir('./test_data')
 
     # First pass for linked addresses
     linked_addresses = find_shared_spending(address)
