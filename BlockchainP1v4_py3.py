@@ -6,11 +6,19 @@ from os import path, makedirs
 
 
 ''' Global Settings '''
+# For use with requests package
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
 headers = {'User-Agent': user_agent}
+# Time between queries
 sleep_time=11
+# Prints extra information
 debug = True
+# Will use local JSON if already queried and downloaded
 cached_results = True
+# Continues past single depth of linked addresses
+recursive = True
+# Stop recursive searching at given depth (only if recursive is enabled)
+depth_limit = 5
 
 
 def get_raw_address(address, cached=cached_results):
@@ -56,8 +64,9 @@ def find_shared_spending(address):
             # input_addresses = [input_item['prev_out']['addr'] for input_item in transaction['inputs']]
             input_addresses = []
             for input_item in transaction['inputs']:
-                if 'addr' in input_item['prev_out'].keys():
-                    input_addresses.append(input_item['prev_out']['addr'])
+                if 'prev_out' in input_item.keys():
+                    if 'addr' in input_item['prev_out'].keys():
+                        input_addresses.append(input_item['prev_out']['addr'])
 
             input_addresses = set(input_addresses)
 
@@ -115,7 +124,7 @@ def ensure_dir(file_path):
         makedirs(directory)
 
 
-def main(address, recursive=False):
+def main(address, recursive=recursive, depth_limit=depth_limit):
     checked_addresses = set()
     to_check = set()
 
@@ -124,12 +133,17 @@ def main(address, recursive=False):
     # First pass for linked addresses
     linked_addresses = find_shared_spending(address)
 
+    depth = 1
     if recursive:
         checked_addresses.add(address)
         to_check = linked_addresses - checked_addresses
 
         # Loop will only break when all linked addresses have been checked
         while len(to_check) > 0:
+            if depth_limit:
+                if depth >= depth_limit:
+                    break
+
             for linked_address in to_check:
                 new_linked_addresses = find_shared_spending(linked_address)
 
@@ -139,10 +153,13 @@ def main(address, recursive=False):
                 checked_addresses.add(linked_address)
 
             to_check = linked_addresses - checked_addresses
+            depth += 1
             # to_check.pop()
 
     print("Results for address:\t\t\t", address)
     print("Total linked addresses:\t\t\t", len(linked_addresses))
+    print("Depth:\t\t\t\t\t", depth)
+
 
     balances_json = get_final_balances(linked_addresses)
 
