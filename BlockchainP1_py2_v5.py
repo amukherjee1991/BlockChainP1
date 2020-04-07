@@ -10,8 +10,8 @@ headers = {'User-Agent': user_agent}
 # address_list=['19ere2oJzJh81A5Q64SExDZYz54RvWHqZz']
 address_list=[
 	# '15hzoz4YzGnj9Pqu8eNmhw4tBpDGjNgwj9',
-	'36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5',
-	# '19ere2oJzJh81A5Q64SExDZYz54RvWHqZz',
+	# '36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5',
+	'19ere2oJzJh81A5Q64SExDZYz54RvWHqZz',
 	# '19QDGMRKdZ9BpDZP2Re6yaDqNQ7zN4wo1D'
         ]
 
