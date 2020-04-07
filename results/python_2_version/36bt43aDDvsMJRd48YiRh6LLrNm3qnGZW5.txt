@@ -1,0 +1,9 @@
+#################################################
+bitcoin address: 36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5
+#################################################
+# of addresses linked with  36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5 is  2
+balance of  36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5 is: 0.0
+balance of  3Lr3uJY4cHM8zg8WhoLp9pfrsBXAQEj5ao is: 0.0
+#################################################
+Total Balance is: 0.0
+#################################################

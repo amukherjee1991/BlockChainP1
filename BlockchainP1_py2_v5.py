@@ -3,35 +3,47 @@ import time  #use time.sleep(number of seconds) to wait between requests
 import requests
 import json
 
+sleeptime=11
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
 headers = {'User-Agent': user_agent}
-address_list=['19ere2oJzJh81A5Q64SExDZYz54RvWHqZz']
+
+# address_list=['19ere2oJzJh81A5Q64SExDZYz54RvWHqZz']
+address_list=[
+	# '15hzoz4YzGnj9Pqu8eNmhw4tBpDGjNgwj9',
+	'36bt43aDDvsMJRd48YiRh6LLrNm3qnGZW5',
+	# '19ere2oJzJh81A5Q64SExDZYz54RvWHqZz',
+	# '19QDGMRKdZ9BpDZP2Re6yaDqNQ7zN4wo1D'
+        ]
+
 address_list=list(set(address_list))
 url='https://blockchain.info/rawaddr/'
 outer=[]
+# print "###########################"
+# print "bitcoin address:",address_list[0]
+# print "###########################"
 for al in address_list:
-	
+	# print "bitcoin address:",v
 	r=requests.get(url+al,headers=headers)
 	json_response=json.loads(r.text)
-	time.sleep(20)
+	time.sleep(sleeptime)
 	add1=[] 
-	add2=[]
+	
 	# print "###########################"
 	# print "Processing",url+al
 	# print "###########################"
 	#Save the group of addresses used as input into different lists
 	#We then ignore the addresses not linked to the address provided in the 
-	addlwadd=[]
+	
 	for k,v in json_response.items():
 		if k=='address':
-			print "###########################"
-			print "bitcoin address:",v
+			
+			print "Processing bitcoin address:",v
 			#save the btc address provided
 			btc_add=str(v)
 			add1.append(v)
-			print "###########################"
+			print "#################################################"
 		elif k=='txs':
-			
+			# print len(v)
 			for v1 in v[:50]:
 				inner=[]
 				# trans=trans+1
@@ -51,7 +63,7 @@ for al in address_list:
 							
 				outer.append(inner)		# print inner
 				for out in outer:
-					if btc_add in out:
+					if btc_add in out: 
 						for o in out:
 							if o not in address_list:
 								# print o
@@ -59,39 +71,34 @@ for al in address_list:
 
 								address_list.append(o)
 								# print address_list
-
+print "#################################################"
+print "bitcoin address:",address_list[0]
+# print "###########################"
+print "#################################################"
 print "# of addresses linked with ",address_list[0], "is ", len(address_list)
 
-balance=[]
-#Error urls can be used to make more requests if HTTP errors are raised
+#get final balances
+
 error_url=[]
+baseurl = 'https://blockchain.info/balance?active='
+query = "|".join(address_list)
+new_url=baseurl+query
+r1=requests.get(new_url,headers=headers)
 
-for add in address_list:
-		# print url+val
-		try:
+json_response1=json.loads(r1.text)
 
-			r1=requests.get(url+add,headers=headers)
-			# r1=scraper.get(url+val).content
-			# print r1
-			# print type(r1)
-			json_response1=json.loads(r1.text)
-			# print json_response1
-			#delay to ensure we are not making a lot of request within a short span of time
-			time.sleep(20)	
-			for k1,v1 in json_response1.items():
-				if k1 == 'final_balance':
-					balance.append(int(v1))
-					print "balance of",add,"is", v1/float((10**7))
-		except Exception as e:
-			error_url.append(url+val,e)
-			# print "Error Url:"+ url+val
-			continue
+final_balance=[]
+for k,v in json_response1.items():
+	
+	balance=str(v['final_balance'])
+	balance=int(balance)/float((10**8))
+	print "balance of ",k,"is:",balance
+	final_balance.append(balance)
 
+
+# print final_balance	
 print "#################################################"
-print "Total Balance is:",sum(balance)/ float((10**7))
-print "#################################################"
+print "Total Balance is:",sum(final_balance)#/ float((10**7))
+print "#################################################"	
 
-# print address_list
-# print address_list
-
-# print addlwadd
+	
