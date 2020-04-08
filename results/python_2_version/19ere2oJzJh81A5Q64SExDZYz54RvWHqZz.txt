@@ -18,3 +18,6 @@ balance of  12wNM39xprrzkUoJ9cQbJMuerKt5iWCZuD is: 0.00051
 balance of  1FwEVEYnESzvU5Laj891EvHmDkvdkwY6Vs is: 0.0
 balance of  1rqA6iteBVryQV3yjF7DHR3Mew8PhxNV8 is: 0.00052
 balance of  14c8poWuaYvkysSdTCX7P6E5cCXJRsYigK is: 0.0
+#################################################
+Total Balance is: 0.01459915
+#################################################
