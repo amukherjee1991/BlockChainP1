@@ -163,7 +163,7 @@ def print_balances(balance_json, print_all=debug):
     for key, value in balance_json.items():
         if print_all and len(balance_json.items()) < 50:
             print(str(key) + "\t " + str(value['final_balance']))
-        else if len(balance_json.items()) >= 50:
+        elif len(balance_json.items()) >= 50:
             print("Too many addresses to display..")
         total.append(int(value['final_balance']))
     print("Balance for all linked address:\t\t", sum(total) / 100000000, "BTC (", sum(total), "Satoshis)")
@@ -185,7 +185,7 @@ def main(address, recursive=recursive, depth_limit=depth_limit):
     checked_addresses = set()
     to_check = set()
 
-    ensure_dir('./test_data')
+    ensure_dir('./test_data/')
 
     # First pass for linked addresses
     linked_addresses = find_shared_spending(address)
